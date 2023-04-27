@@ -1,0 +1,187 @@
+package com.example.backend.controller;
+
+import org.bson.BsonBinarySubType;
+import org.bson.types.Binary;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.BasicQuery;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.example.backend.model.Customer;
+import com.example.backend.model.CustomerForApprovement;
+import com.example.backend.model.UserModel;
+import com.example.backend.repo.CustomerForApprovementRepo;
+import com.example.backend.repo.CustomerRepo;
+import com.example.backend.repo.UserRepo;
+
+import ch.qos.logback.core.model.Model;
+
+import org.springframework.http.MediaType;
+import java.io.ByteArrayInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+
+import java.util.*;
+
+@CrossOrigin(origins = "http://localhost:3000")
+@RestController
+public class UserController {
+
+	@Autowired
+	UserRepo ur;
+	@Autowired
+	private CustomerForApprovementRepo custForApprovementRepo;
+
+	@Autowired
+	UserModel user;
+
+	@Autowired
+	CustomerRepo custRepo;
+
+	@Autowired
+	CustomerForApprovement customerForApprovement;
+
+	@GetMapping("/")
+	public String home() {
+		return "hello app";
+	}
+
+	@PostMapping("/register")
+	public UserModel register(@RequestParam MultipartFile pdf, String role, String username, String password,
+			String email) throws IOException {
+
+		user.setFile(new Binary(BsonBinarySubType.BINARY, pdf.getBytes()));
+		user.setUsername(username);
+		user.setEmail(email);
+		user.setRole(role);
+		user.setPassword(password);
+		ur.save(user);
+		return user;
+	}
+
+	@PostMapping("/login")
+	public String login(@RequestBody UserModel user) {
+
+		if (ur.findByUsernameAndPassword(user.getUsername(), user.getPassword()).size() > 0) {
+			return "User Found";
+
+		}
+
+		return "User Not Found";
+	}
+
+	@GetMapping("/getuser")
+	public List<UserModel> get() {
+
+		return ur.findAll();
+
+	}
+
+	@RequestMapping("/retrieve")
+	public ResponseEntity<InputStreamResource> downloadFile(@RequestParam String username) throws IOException {
+		UserModel u = ur.findByUsername(username);
+
+		Binary binary = null;
+
+		binary = u.getFile();
+
+		InputStream inputStream = new ByteArrayInputStream(binary.getData());
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=file.pdf");
+		headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE);
+
+		InputStreamResource inputStreamResource = new InputStreamResource(inputStream);
+		return ResponseEntity.ok().headers(headers).body(inputStreamResource);
+	}
+
+	@RequestMapping("/registerCustomer")
+	public Map<String, String> registerCustomer(@RequestBody Map<String, Object> requestParams) {
+		HashMap<String, String> map = new HashMap<>();
+
+		String email = (String) requestParams.get("email");
+		String fname = (String) requestParams.get("fname");
+		String lname = (String) requestParams.get("lname");
+		String city = (String) requestParams.get("city");
+		String address = (String) requestParams.get("address");
+		String state = (String) requestParams.get("state");
+		String pdf=(String)requestParams.get("pdf");
+		if (custRepo.findByEmail(email).size() > 0) {
+			Customer customer = custRepo.findByEmail(email).get(0);
+			Boolean validFname = customer.getFname().equalsIgnoreCase(fname.trim());
+			Boolean validLname = customer.getLname().equalsIgnoreCase(lname.trim());
+			Boolean validCity = customer.getCity().equalsIgnoreCase(city.trim());
+			Boolean validState = customer.getState().equals(state.trim());
+			if (validFname && validLname && validCity && validState) {
+				  customerForApprovement.setFname(fname);
+				  customerForApprovement.setLname(lname);
+				  customerForApprovement.setCity(city);
+				  customerForApprovement.setEmail(email);
+				  customerForApprovement.setAddress(address);
+				  customerForApprovement.setState(state);
+				  customerForApprovement.setPdf(new Binary(BsonBinarySubType.BINARY, pdf.getBytes()));
+				
+			}
+			  map.put("fname", Boolean.toString( validFname));
+			  map.put("lname", Boolean.toString(validLname));
+			  map.put("city", Boolean.toString(validCity));
+			  map.put("state", Boolean.toString(validState));	
+			  map.put("result", "true");
+		  }
+		  else 
+			  map.put("result", "Customer not found");
+		  return map;
+			
+
+		}
+//	  
+//	  if(custRepo.findByEmail(c.getEmail()).size()>0)
+//	  {
+//		  Customer customer=custRepo.findByEmail(c.getEmail()).get(0);
+//		
+//		  Boolean validFname=customer.getFname().equalsIgnoreCase(c.getFname().trim());
+//		  Boolean validLname=customer.getLname().equalsIgnoreCase(c.getLname().trim());
+//		  Boolean validCity=customer.getCity().equalsIgnoreCase(c.getCity().trim());
+//		  Boolean validState=customer.getState().equals(c.getState().trim());
+//		  if(validFname && validLname && validCity && validState)
+//		  {
+//			  customerForApprovement.setFname(c.getFname());
+//			  customerForApprovement.setLname(c.getLname());
+//			  customerForApprovement.setCity(c.getCity());
+//			  customerForApprovement.setEmail(c.getEmail());
+//			  customerForApprovement.setAddress(c.getAddress());
+//			  customerForApprovement.setState(c.getState());
+//			  customerForApprovement.setPdf(new Binary(BsonBinarySubType.BINARY, c.getPdf().toString().getBytes()));
+//			  custForApprovementRepo.save(c);
+//			  map.put("result", "submitted"); 
+//			  return map;
+//		  }
+//		  map.put("fname", Boolean.toString( validFname));
+//		  map.put("lname", Boolean.toString(validLname));
+//		  map.put("city", Boolean.toString(validCity));
+//		  map.put("state", Boolean.toString(validState));	
+//		  map.put("result", "true");
+//	  }
+//	  else 
+//		  map.put("result", "Customer not found");
+//	  return map;
+//	
+
+		return map;
+	}
+
+}

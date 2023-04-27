@@ -1,0 +1,49 @@
+package com.example.backend.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.backend.model.UserModel;
+import com.example.backend.repo.UserRepo;
+
+import java.util.*;
+
+
+@CrossOrigin(origins = "http://localhost:3000")
+@RestController
+public class UserController {
+	
+	@Autowired
+	UserRepo ur;
+
+	@PostMapping("/register")
+	public UserModel register(@RequestBody UserModel user) {
+		
+		return ur.save(user);
+	}
+	
+	@PostMapping("/login")
+	public String login(@RequestBody UserModel user) {
+		
+		if(ur.findByUsernameAndPassword(user.getUsername(),user.getPassword()).size() > 0) {
+			return "User Found";
+			
+			}
+		
+		
+		return "User Not Found";
+}
+	
+	@GetMapping("/getuser")
+	public List<UserModel> get() {
+		
+		return ur.findAll();
+		
+	}
+}
