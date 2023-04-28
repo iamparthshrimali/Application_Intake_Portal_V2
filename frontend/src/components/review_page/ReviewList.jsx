@@ -9,27 +9,13 @@ import { Button } from '@mui/material';
 
 const ReviewList = () => {
 
-
-  const [pdfDataUrl, setPdfDataUrl] = useState(null);
-
-  function MyPDFViewer() {
-    // fetch('http://localhost:8080/retrieveFile2?username=kishan@gmail.com')
-    //   .then(response => response.arrayBuffer())
-    //   .then(arrayBuffer => {
-    //     const blob = new Blob([arrayBuffer], { type: 'application/pdf' });
-    //     const dataUrl = URL.createObjectURL(blob);
-    //     setPdfDataUrl(dataUrl);
-    //   });
-    
+  const [showModal, setShowModal] = React.useState(false);
 
   
-
-  
-}
-
   
   const [tableData, setTableData] = useState([])
   let [tableUpdated,setTableUpdated]=useState(false);
+  const [pdfSrc,setPdfSrc]=useState();
   const [pdf,setPdf]=useState(null)
   const columns = [
     { title: "Email", field:"email", sorting: true, filtering: true, headerStyle: { color: "#fff" } },
@@ -44,10 +30,10 @@ const ReviewList = () => {
   ]
   
 function handler(pdf) {
-  // const blob = new Blob([pdf], { type: 'text/plain' });
   const pdfSrc = `data:application/pdf;base64,${pdf}`;
-      document.querySelector('#frame').src = pdfSrc;
- 
+      // document.querySelector('#frame').src = pdfSrc;
+      // document.querySelector('#frame2').src = pdfSrc;
+      setPdfSrc(pdfSrc)
   
 }
 
@@ -59,8 +45,46 @@ function handler(pdf) {
       })
   },[tableUpdated]);
   return (
-    <>
-     <iframe id="frame" style={{width:"600px",height:"600px"}} ></iframe>
+    <div style={{postion:"relative"}}>
+      <div style={{}}>
+      <button
+        className="bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+        type="button"
+        onClick={() => setShowModal(true)}
+      >
+        Open regular modal
+      </button>
+      {showModal ? (
+        <>
+          <div
+            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+          >
+            <div className="relative w-auto my-6 mx-auto max-w-3xl">
+              {/*content*/}
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none " id="content">
+                {/*header*/}
+             
+                {/* <iframe id="frame2" style={{width:"600px",height:"600px"}} /> */}
+                <iframe id="frame" src={pdfSrc} style={{width:"600px",height:"400px"}} ></iframe>
+                {/*footer*/}
+                <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+                  <button
+                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Close
+                  </button>
+                
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </>
+      ) : null}
+    
+      </div>
       <MaterialTable columns={columns} data={tableData}  title="Customers Information"
         editable={{
           onRowAdd: (newRow) => new Promise((resolve, reject) => {
@@ -125,7 +149,7 @@ function handler(pdf) {
         icons={{ Add: () => <AddIcon /> }} />
         
        
-  </>
+  </div>
   );
 }
 

@@ -1,0 +1,2 @@
+/addCustomer request mapping added in spring boot
+download form button remaining in addCustomerForApprovementPage
