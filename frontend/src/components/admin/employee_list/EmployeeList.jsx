@@ -1,9 +1,6 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import MaterialTable from 'material-table'
-import GetAppIcon from '@material-ui/icons/GetApp';
-import AddIcon from '@material-ui/icons/Add';
-import { selectClasses } from '@mui/material';
+import MaterialTable from 'material-table';
+import React, { useEffect, useState } from 'react';
 
 
 const EmployeeList = () => {
@@ -58,12 +55,12 @@ const EmployeeList = () => {
           paginationType: "stepped", showFirstLastPageButtons: true, paginationPosition: "both", exportButton: true,
           exportAllData: true, exportFileName: "TableData", addRowPosition: "first", actionsColumnIndex: -1,
           // selectionProps: rowData => ({
-          //   disabled: rowData.age == null,
+          //   disabled: rowData.age === null,
             // color:"primary"
           // }),
           grouping: true, columnsButton: true,
           rowStyle: (data, index) => index % 2 === 0 ? { background: "#f5f5f5" } : null,
-          headerStyle: { background: "rgb(249 115 22)",color:"#fff"}
+          headerStyle: { background: "#e879f9",color:"#fff"}
         }}
        
         />

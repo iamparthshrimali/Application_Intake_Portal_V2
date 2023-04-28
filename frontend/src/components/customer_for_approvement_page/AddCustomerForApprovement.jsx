@@ -1,16 +1,16 @@
-import { Button, TextField } from '@mui/material';
-import React, { useEffect, useState } from 'react'
-import { useForm } from "react-hook-form";
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import { Button, TextField } from '@mui/material';
+import debounce from 'debounce';
+import React, { useEffect, useState } from 'react';
+import { useForm } from "react-hook-form";
 import { registerCustomerAPI } from "../../services/registerCustomer";
 import { validateAPI } from '../../services/validateService';
-import debounce from 'debounce';
+import {PulseLoader} from "react-spinners"
 
 
 
 
 import { Toaster, toast } from 'react-hot-toast';
-import { Link } from 'react-router-dom';
 
 const err = (e) => toast.error(e)
 const success = (e) => toast.success(e)
@@ -26,12 +26,10 @@ function AddCustomerForApprovement() {
   let [stateCheckmark, setStateCheckmark] = useState("none");
   let [customerFound, setCustomerFound] = useState(false);
   let [submitting, setSubmitting] = useState(false)
-  let [submitted, setSubmitted] = useState(false)
-  let [status, setStatus] = useState("")
+ 
   let [error, setError] = useState("")
-  let [twoSecondsCompleted, setTwoSecondsCompleted] = useState(false)
   let [isFormValid, setIsFormValid] = useState(false);
-  let [email, setEmail] = useState("")
+
   const [file, setFile] = useState(null);
 
   useEffect(() => {
@@ -40,14 +38,14 @@ function AddCustomerForApprovement() {
     res.then((res) => {
       if (res.data.result === "true") {
         setCustomerFound(true);
-        res.data.fname === "false" && details.fname != "" ? setFnameCheckmark("visible") : setFnameCheckmark("hidden");
+        res.data.fname === "false" && details.fname !== "" ? setFnameCheckmark("visible") : setFnameCheckmark("hidden");
 
-        res.data.lname === "false" && details.lname != "" ? setLnameCheckmark("visible") : setLnameCheckmark("hidden");
-        res.data.city === "false" && details.city != "" ? setCityCheckmark("visible") : setCityCheckmark("hidden");
-        res.data.state === "false" && details.state != "" ? setStateCheckmark("visible") : setStateCheckmark("hidden");
+        res.data.lname === "false" && details.lname !== "" ? setLnameCheckmark("visible") : setLnameCheckmark("hidden");
+        res.data.city === "false" && details.city !== "" ? setCityCheckmark("visible") : setCityCheckmark("hidden");
+        res.data.state === "false" && details.state !== "" ? setStateCheckmark("visible") : setStateCheckmark("hidden");
       }
       console.log(res.data)
-      if (res.data.fname == "true" && res.data.lname == "true" && res.data.city == "true" && res.data.state == "true") {
+      if (res.data.fname === "true" && res.data.lname === "true" && res.data.city === "true" && res.data.state === "true") {
         setIsFormValid(true)
       }
 
@@ -83,8 +81,8 @@ function AddCustomerForApprovement() {
 
   const handleChange = (e) => {
     setIsFormValid(false)
-    if (e.target.getAttribute("name") == "email") {
-      setEmail(e.target.value)
+    if (e.target.getAttribute("name") === "email") {
+      
       setCustomerFound(false)
     }
     setDetails({ ...details, [e.target.getAttribute("name")]: e.target.value })
@@ -103,7 +101,7 @@ function AddCustomerForApprovement() {
     data["pdf"] = fileData.file;
     data["approvementStatus"]=approvemntStatus;
     data["addedBy"]=addedBy;
-    // if(jwt.getRole=="admin")
+    // if(jwt.getRole==="admin")
     // {
     //   approvemntStatus=1;
     // }
@@ -114,31 +112,24 @@ function AddCustomerForApprovement() {
       return
     }
 
-    setStatus("")
-    setTwoSecondsCompleted(false)
+
+    
     setSubmitting(true);
     console.log(data)
     registerCustomerAPI({...data,approvemntStatus:approvemntStatus,addedBy:addedBy}).then((res) => {
 
       setSubmitting(false)
-      setSubmitted(true)
-      setTimeout(() => {
-        setTwoSecondsCompleted(true);
-
-      }, 2000);
-
-
-
+      
       if (res.data.result === "true") {
         setCustomerFound(true);
       }
       else if (res.data.result === "submitted") {
-        setStatus("submitted");
+     
         success("customer submitted for approvement")
 
       } else {
         setCustomerFound(false)
-        setStatus("not found")
+        
       }
 
     });
@@ -171,12 +162,12 @@ function AddCustomerForApprovement() {
                   <div className='flex  justify-center items-center'>
                     <div className='rounded-full border-2  border-black border-solid flex justify-center' style={{ width: "30px" }} >
                       1
-                    </div>
+                    </div> 
                     <div className='bg-black ' style={{ height: "5px", width: "100px" }}>
 
                     </div>
                   </div>
-                  <div className='px-4 text-orange-500'>
+                  <div className='px-4 text-violet-500'>
                     Application Progress 1
                   </div>
                 </div>
@@ -192,7 +183,7 @@ function AddCustomerForApprovement() {
 
                     </div>
                   </div>
-                  <div className='flex justify-center w-full text-orange-500'>
+                  <div className='flex justify-center w-full text-violet-500'>
                     Application Progress 2
                   </div>
                 </div>
@@ -208,7 +199,7 @@ function AddCustomerForApprovement() {
 
                     </div>
                   </div>
-                  <div className='flex justify-center w-full text-orange-500'>
+                  <div className='flex justify-center w-full text-violet-500'>
                     Application Progress 3
                   </div>
                 </div>
@@ -223,7 +214,7 @@ function AddCustomerForApprovement() {
                     </div>
 
                   </div>
-                  <div className='flex justify-center w-full text-orange-500'>
+                  <div className='flex justify-center w-full text-violet-500'>
                     Application Progress 3
                   </div>
                 </div>
@@ -235,7 +226,7 @@ function AddCustomerForApprovement() {
             <form id="form" action="" onSubmit={handleSubmit(formSubmit)} >
               <div className="bottom mt-10 px-8 py-4 flex flex-col shadow-md  gap-2 md:flex-row sm:flex-row   ">
                 <div className="left w-1/2 sm:w-full ">
-                  <div className="heading px-2 bg-gray-100 text-orange-400 text-bold">
+                  <div className="heading px-2 bg-gray-100 text-violet-400 text-bold">
                     <h2>Enter the follwing details</h2>
                   </div>
                   <div className="form " style={{ width: "80%" }}>
@@ -248,7 +239,7 @@ function AddCustomerForApprovement() {
                       </div>
                       <div>
                         {customerFound ? <span className="visible">✔️</span> : ``}
-                        {!customerFound && details.email != "" ? <span className="visible">❌</span> : ``}
+                        {!customerFound && details.email !== "" ? <span className="visible">❌</span> : ``}
                       </div>
                     </div>
                     <div className="fname flex items-center">
@@ -257,9 +248,9 @@ function AddCustomerForApprovement() {
 
                       </div>
                       <div>
-                        {customerFound && details.fname != "" ? <span className={fnameCheckmark !== "visible" ? 'visible' : 'hidden'}>✔️</span> : ``}
-                        {customerFound && details.fname != "" ?
-                          <span style={{ visibility: fnameCheckmark == "none" ? "hidden" : fnameCheckmark, display: "block" }} className="hidden">❌</span> : ""}
+                        {customerFound && details.fname !== "" ? <span className={fnameCheckmark !== "visible" ? 'visible' : 'hidden'}>✔️</span> : ``}
+                        {customerFound && details.fname !== "" ?
+                          <span style={{ visibility: fnameCheckmark === "none" ? "hidden" : fnameCheckmark, display: "block" }} className="hidden">❌</span> : ""}
                       </div>
                     </div>
                     <div className="lname flex items-center">
@@ -268,9 +259,9 @@ function AddCustomerForApprovement() {
 
                       </div>
                       <div>
-                        {customerFound && details.lname != "" ? <span className={lnameCheckmark !== "visible" ? 'visible' : 'hidden'}>✔️</span> : ``}
-                        {customerFound && details.lname != "" ?
-                          <span style={{ visibility: lnameCheckmark == "none" ? "hidden" : lnameCheckmark, display: "block" }} className="hidden">❌</span> : ""}
+                        {customerFound && details.lname !== "" ? <span className={lnameCheckmark !=="visible" ? 'visible' : 'hidden'}>✔️</span> : ``}
+                        {customerFound && details.lname !== "" ?
+                          <span style={{ visibility: lnameCheckmark === "none" ? "hidden" : lnameCheckmark, display: "block" }} className="hidden">❌</span> : ""}
                       </div>
                     </div>
                     <div className="address flex items-center w-full">
@@ -278,7 +269,7 @@ function AddCustomerForApprovement() {
                         <TextField id="standard-basic" label="Customer Address" className='w-full' variant="standard" {...register("address")} required disabled={!customerFound} onChange={debounce(handleChange, 300)} autoComplete="off" />
                       </div>
                       <div>
-                        {customerFound && details.address != "" ? <span className="visible">✔️</span> : ``}
+                        {customerFound && details.address !== "" ? <span className="visible">✔️</span> : ``}
 
                       </div>
 
@@ -288,9 +279,9 @@ function AddCustomerForApprovement() {
                         <TextField id="standard-basic" label="Customer State" className='w-full' variant="standard" {...register("state")} required disabled={!customerFound} onChange={debounce(handleChange, 300)} autoComplete="off" />
                       </div>
                       <div>
-                        {customerFound && details.state != "" ? <span className={stateCheckmark !== "visible" ? 'visible' : 'hidden'}>✔️</span> : ``}
-                        {customerFound && details.state != "" ?
-                          <span style={{ visibility: stateCheckmark == "none" ? "hidden" : stateCheckmark, display: "block" }} className="hidden">❌</span> : ""}
+                        {customerFound && details.state !== "" ? <span className={stateCheckmark !=="visible" ? 'visible' : 'hidden'}>✔️</span> : ``}
+                        {customerFound && details.state !== "" ?
+                          <span style={{ visibility: stateCheckmark === "none" ? "hidden" : stateCheckmark, display: "block" }} className="hidden">❌</span> : ""}
                       </div>
                     </div>
                     <div className="city flex items-center w-full">
@@ -299,13 +290,15 @@ function AddCustomerForApprovement() {
 
                       </div>
                       <div>
-                        {customerFound && details.city != "" ? <span className={cityChecckmark !== "visible" ? 'visible' : 'hidden'}>✔️</span> : ``}
-                        {customerFound && details.city != "" ?
-                          <span style={{ visibility: cityChecckmark == "none" ? "hidden" : cityChecckmark, display: "block" }} className="hidden">❌</span> : ""}
+                        {customerFound && details.city !== "" ? <span className={cityChecckmark !=="visible" ? 'visible' : 'hidden'}>✔️</span> : ``}
+                        {customerFound && details.city !== "" ?
+                          <span style={{ visibility: cityChecckmark === "none" ? "hidden" : cityChecckmark, display: "block" }} className="hidden">❌</span> : ""}
                       </div>
                     </div>
                     <div className="submit flex justify-center mt-4 mb-4" variant="outlined">
-                      <Button type='submit' variant="outlined" style={{ display: submitting === false ? "block" : "none" }} disabled={!isFormValid}>Submit</Button>
+                    {
+                      submitting ? <PulseLoader />:<Button type='submit' variant="outlined"  disabled={!isFormValid}>Submit</Button>
+                    }  
 
                     </div>
 
@@ -315,7 +308,7 @@ function AddCustomerForApprovement() {
 
                 <div className="right w-1/2 sm:w-full">
                   <div className=''>
-                    <div className="heading px-2 bg-gray-100 text-orange-400 text-bold">
+                    <div className="heading px-2 bg-gray-100 text-violet-400 text-bold">
                       <h2>File to upload</h2>
                     </div>
                     <div className='flex flex-col items-center mt-5'>
@@ -329,13 +322,13 @@ function AddCustomerForApprovement() {
                         <div className="upload-btn ">
                           {file ? (
                             <>
-                              <label className='w-full bg-transparent hover:bg-orange-500 text-orange-500 hover:text-white font-semibold py-2 px-4 border border-orange-500 hover:border-transparent rounded' onClick={handleViewClick}>View</label>
-                              <label className='w-full bg-transparent hover:bg-orange-500 text-orange-500 font-semibold hover:text-white py-2 px-4 border border-orange-500 hover:border-transparent rounded'>
+                              <label className='w-full bg-transparent hover:bg-violet-500 text-violet-500 hover:text-white font-semibold py-2 px-4 border border-orange-500 hover:border-transparent rounded' onClick={handleViewClick}>View</label>
+                              <label className='w-full bg-transparent hover:bg-violet-500 text-violet-500 font-semibold hover:text-white py-2 px-4 border border-orange-500 hover:border-transparent rounded'>
                                 Change <input type="file" size="60" style={{ display: "none", width: "100%", heigth: "100%" }} accept=".pdf" onChange={handleFileChange} id="file" />
                               </label>
                             </>
                           ) : (
-                            <label className='w-full bg-transparent hover:bg-orange-500 text-orange-500 font-semibold hover:text-white py-2 px-4 border border-orange-500 hover:border-transparent rounded '>
+                            <label className='w-full bg-transparent hover:bg-violet-500 text-violet-500 font-semibold hover:text-white py-2 px-4 border border-orange-500 hover:border-transparent rounded '>
                               Upload <input type="file" size="60" style={{ display: "none", width: "100%", heigth: "100%" }} accept=".pdf" onChange={handleFileChange} id="file" />
                             </label>
                           )}

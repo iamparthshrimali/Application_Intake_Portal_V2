@@ -1,22 +1,23 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
-import MaterialTable from 'material-table'
-import GetAppIcon from '@material-ui/icons/GetApp';
 import AddIcon from '@material-ui/icons/Add';
-import { Button } from '@mui/material';
+import GetAppIcon from '@material-ui/icons/GetApp';
+import axios from 'axios';
+import MaterialTable from 'material-table';
+import React, { useEffect, useState } from 'react';
+import { FadeLoader } from 'react-spinners';
 
 
 
 const ReviewList = () => {
 
   const [showModal, setShowModal] = React.useState(false);
+  const [loading,setLoading]=useState(true);
 
   
   
   const [tableData, setTableData] = useState([])
   let [tableUpdated,setTableUpdated]=useState(false);
   const [pdfSrc,setPdfSrc]=useState();
-  const [pdf,setPdf]=useState(null)
+
   const columns = [
     { title: "Email", field:"email", sorting: true, filtering: true, headerStyle: { color: "#fff" } },
     { title: "First Namer", field: "fname", filterPlaceholder: "filter" },
@@ -41,7 +42,7 @@ function handler(pdf) {
       axios.get("http://localhost:8080/getCustomersList").then(res => setTableData(res.data)).catch((err)=>setTableData(false))
       axios.get("http://localhost:8080/retrieveFile2?username=kishan@gmail.com").then((res)=>{
         handler(res.data.data);
-       
+       setLoading(false)
       })
   },[tableUpdated]);
   return (
@@ -65,7 +66,9 @@ function handler(pdf) {
                 {/*header*/}
              
                 {/* <iframe id="frame2" style={{width:"600px",height:"600px"}} /> */}
-                <iframe id="frame" src={pdfSrc} style={{width:"600px",height:"400px"}} ></iframe>
+               { !loading ?  <iframe title='pdf' id="frame" src={pdfSrc} style={{width:"600px",height:"400px"}} ></iframe>: <div style={{display:"flex",justifyContent:"center"}}>
+                   <FadeLoader />
+                </div> }
                 {/*footer*/}
                 <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
                   <button
@@ -94,7 +97,7 @@ function handler(pdf) {
             // setTimeout(() => resolve(), 500)]
             async function makePostRequest() {
               try {
-                const response =  axios.post("http://localhost:8080/addCustomer", newRow);
+                  axios.post("http://localhost:8080/addCustomer", newRow);
                 // // By hook or crook i wanted to react know that table is updated
                 tableUpdated ? setTableUpdated(false) : setTableUpdated(true)
                 await resolve(); 
@@ -138,12 +141,12 @@ function handler(pdf) {
           exportAllData: true, exportFileName: "TableData", addRowPosition: "first", actionsColumnIndex: -1, selection: true,
           showSelectAllCheckbox: true, showTextRowsSelected: true,
           // selectionProps: rowData => ({
-          //   disabled: rowData.age == null,
+          //   disabled: rowData.age === null,
             // color:"primary"
           // }),
           grouping: true, columnsButton: true,
           rowStyle: (data, index) => index % 2 === 0 ? { background: "#f5f5f5" } : null,
-          headerStyle: { background: "rgb(249 115 22)",color:"#fff"}
+          headerStyle: { background: "#e879f9",color:"#fff"}
         }}
        
         icons={{ Add: () => <AddIcon /> }} />
@@ -183,32 +186,32 @@ export default ReviewList
 //               <thead>
 //                 <tr>
 //                   <th
-//                     class="px-5 py-3 border-b-2 bg-orange-300  text-left text-xs font-semibold text-gray-700 uppercase tracking-wider "
+//                     class="px-5 py-3 border-b-2 bg-violet-300  text-left text-xs font-semibold text-gray-700 uppercase tracking-wider "
 //                   >
 //                     Email
 //                   </th>
 //                   <th
-//                     class="px-5 py-3 border-b-2 bg-orange-300  text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+//                     class="px-5 py-3 border-b-2 bg-violet-300  text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
 //                   >
 //                     First Name
 //                   </th>
 //                   <th
-//                     class="px-5 py-3 border-b-2 bg-orange-300  text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+//                     class="px-5 py-3 border-b-2 bg-violet-300  text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
 //                   >
 //                     Last Name
 //                   </th>
 //                   <th
-//                     class="px-5 py-3 border-b-2 border-orange-200 bg-orange-300 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+//                     class="px-5 py-3 border-b-2 border-violet-200 bg-violet-300 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
 //                   >
 //                     Address
 //                   </th>
 //                   <th
-//                     class="px-5 py-3 border-b-2 border-orange-200 bg-orange-300 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+//                     class="px-5 py-3 border-b-2 border-violet-200 bg-violet-300 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
 //                   >
 //                     City
 //                   </th>
 //                   <th
-//                     class="px-5 py-3 border-b-2 border-orange-200 bg-orange-300 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
+//                     class="px-5 py-3 border-b-2 border-violet-200 bg-violet-300 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
 //                   >
 //                     state
 //                   </th>

@@ -1,6 +1,6 @@
-import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Fragment, useEffect } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 
 
@@ -10,10 +10,13 @@ function classNames(...classes) {
 }
 
 export default function Navabar({navigation}) {
+  useEffect(()=>{
+   
+  },[])
 
   return (
  
-    <Disclosure as="nav" className="bg-orange-500">
+    <Disclosure as="nav" className="bg-violet-500">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -84,12 +87,12 @@ export default function Navabar({navigation}) {
                     
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="#"
+                          <Link
+                            to="/"
                             className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                           >
                             Sign out
-                          </a>
+                          </Link>
                         )}
                       </Menu.Item>
                     </Menu.Items>

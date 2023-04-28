@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { loginAPI } from "../../services/loginService";
 import { useNavigate } from "react-router-dom";
-import Agent_Page from "../customer_for_approvement_page/AddCustomerForApprovement";
-import ProtectedRoute from "../../routes/ProtectedRoute";
+
 
 function Login() {
   // const [credentials, setCredentials] = useState({});
@@ -53,7 +52,7 @@ function Login() {
           })}
         />
         <p style={{ color: "red" }}>{errors.password?.message}</p>
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+        <button className="bg-violet-500 hover:bg-violet-700 text-white font-bold py-2 px-4 rounded-full">
           Login
         </button>
 

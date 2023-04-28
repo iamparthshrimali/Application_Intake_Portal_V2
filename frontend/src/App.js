@@ -2,7 +2,6 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import AddCustomerForApprovement from "./components/customer_for_approvement_page/AddCustomerForApprovement";
 import Home from "./components/home/Home";
-import Login from "./components/login/Login";
 import Register from "./components/register/Register";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
@@ -16,7 +15,7 @@ import AgentCustomersList from "./components/agent/agent_customer_list/AgentCust
 import EmployeeList from "./components/admin/employee_list/EmployeeList";
 import ReviewList from "./components/review_page/ReviewList";
 function App() {
-  const isAuth = false;
+ 
 
   return (
     <div className="App flex flex-col " style={{ height: "100vh" }}>  {/* flex */}
@@ -42,8 +41,7 @@ function App() {
         </Route>
         <Route path="/agent_page" element={<AgentPage />}  >
           <Route path="add"  element={<AddCustomerForApprovement/>} />
-          <Route index   element={<CustomerList />} />
-          <Route path="list"   element={<AgentCustomersList />} />
+          <Route  index path="list"   element={<AgentCustomersList />} />
         </Route>
         <Route path="/reviewer_page" element={<ReviewerPage />} />
       </Routes>

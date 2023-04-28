@@ -17,7 +17,7 @@ input:disabled {
 .navlink.active{
     background-color: white;
     
-    color:orange;
+    color:violet;
     border-radius: 10px;
     
 }
