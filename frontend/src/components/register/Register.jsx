@@ -49,15 +49,7 @@ function Register() {
             {...register("username", { required: "Username is required" })}
           />
           <p style={{ color: "red" }}>{errors.username?.message}</p>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-            {...register("email", {
-              required: "Email is required",
-            })}
-          />
+          
           <p style={{ color: "red" }}>{errors.email?.message}</p>
           <label htmlFor="Password">Password</label>
           <input
@@ -68,6 +60,16 @@ function Register() {
               required: "Password is required",
             })}
           />
+          <label htmlFor="mono">Mobile Number</label>
+          <input
+            type="number"
+            id="mono"
+            className="shadow appearance-none border rounded  py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+            {...register("mono", {
+              required: "Mobile Number  is required",
+            })}
+          />
+          
 
           <p style={{ color: "red" }}>{errors.confirm_password?.message}</p>
           <label htmlFor="Role">Role</label>
@@ -82,9 +84,9 @@ function Register() {
             <option selected disabled>
               Select Role
             </option>
-            <option value="0">Admin</option>
-            <option value="1">Agent</option>
-            <option value="2">Reviewer</option>
+           
+            <option value="0">Agent</option>
+            <option value="1">Reviewer</option>
           </select>
           <button
             type="submit"

@@ -3,12 +3,34 @@ import React, { useEffect, useState } from 'react'
 import MaterialTable from 'material-table'
 import GetAppIcon from '@material-ui/icons/GetApp';
 import AddIcon from '@material-ui/icons/Add';
+import { Button } from '@mui/material';
 
 
-const CustomerList = () => {
+
+const ReviewList = () => {
+
+
+  const [pdfDataUrl, setPdfDataUrl] = useState(null);
+
+  function MyPDFViewer() {
+    // fetch('http://localhost:8080/retrieveFile2?username=kishan@gmail.com')
+    //   .then(response => response.arrayBuffer())
+    //   .then(arrayBuffer => {
+    //     const blob = new Blob([arrayBuffer], { type: 'application/pdf' });
+    //     const dataUrl = URL.createObjectURL(blob);
+    //     setPdfDataUrl(dataUrl);
+    //   });
+    
+
+  
+
+  
+}
+
   
   const [tableData, setTableData] = useState([])
   let [tableUpdated,setTableUpdated]=useState(false);
+  const [pdf,setPdf]=useState(null)
   const columns = [
     { title: "Email", field:"email", sorting: true, filtering: true, headerStyle: { color: "#fff" } },
     { title: "First Namer", field: "fname", filterPlaceholder: "filter" },
@@ -20,11 +42,25 @@ const CustomerList = () => {
     { title: "State", field: "state",
      headerStyle: { color: "#fff" } },
   ]
+  
+function handler(pdf) {
+  // const blob = new Blob([pdf], { type: 'text/plain' });
+  const pdfSrc = `data:application/pdf;base64,${pdf}`;
+      document.querySelector('#frame').src = pdfSrc;
+ 
+  
+}
+
   useEffect(() => {
       axios.get("http://localhost:8080/getCustomersList").then(res => setTableData(res.data)).catch((err)=>setTableData(false))
+      axios.get("http://localhost:8080/retrieveFile2?username=kishan@gmail.com").then((res)=>{
+        handler(res.data.data);
+       
+      })
   },[tableUpdated]);
   return (
     <>
+     <iframe id="frame" style={{width:"600px",height:"600px"}} ></iframe>
       <MaterialTable columns={columns} data={tableData}  title="Customers Information"
         editable={{
           onRowAdd: (newRow) => new Promise((resolve, reject) => {
@@ -87,11 +123,13 @@ const CustomerList = () => {
         }}
        
         icons={{ Add: () => <AddIcon /> }} />
+        
+       
   </>
   );
 }
 
-export default CustomerList
+export default ReviewList
 
 
 

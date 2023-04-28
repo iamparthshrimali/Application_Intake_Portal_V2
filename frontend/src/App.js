@@ -13,6 +13,8 @@ import AdminPage from "./components/admin/AdminPage";
 import ReviewerPage from "./components/reviewer/ReviewerPage";
 import AgentPage from "./components/agent/AgentPage";
 import AgentCustomersList from "./components/agent/agent_customer_list/AgentCustomersList";
+import EmployeeList from "./components/admin/employee_list/EmployeeList";
+import ReviewList from "./components/review_page/ReviewList";
 function App() {
   const isAuth = false;
 
@@ -35,6 +37,8 @@ function App() {
           <Route path="add"  element={<AddCustomerForApprovement/>} />
           <Route index   element={<CustomerList />} />
           <Route path="list"   element={<CustomerList />} />
+          <Route path="emplist"   element={<EmployeeList />} />
+          <Route path="reviewlist"   element={<ReviewList />} />
         </Route>
         <Route path="/agent_page" element={<AgentPage />}  >
           <Route path="add"  element={<AddCustomerForApprovement/>} />

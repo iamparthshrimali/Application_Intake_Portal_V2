@@ -6,8 +6,11 @@ import { Outlet } from 'react-router-dom'
 
 const AdminPage = () => {
   const navigation = [
-    { name: 'Show List', href: 'list', current: true },
+    { name: 'Customers', href: 'list', current: true },
     { name: 'Add', href: 'add', current: false },
+    {name:"Employees",href:"emplist",current:false},
+    {name:"Review",href:"reviewlist",current:false}
+ 
   ]
   return (
     <>

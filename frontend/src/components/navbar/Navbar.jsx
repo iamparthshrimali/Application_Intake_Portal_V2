@@ -10,7 +10,9 @@ function classNames(...classes) {
 }
 
 export default function Navabar({navigation}) {
+
   return (
+ 
     <Disclosure as="nav" className="bg-orange-500">
       {({ open }) => (
         <>

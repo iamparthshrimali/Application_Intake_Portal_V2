@@ -96,12 +96,18 @@ function AddCustomerForApprovement() {
 
   const formSubmit = (data) => {
 
-    // const fileInput = document.querySelector('file');
-    // let selectedFile ;
-    // fileInput.onchange = () => {
-    // selectedFile= fileInput.files[0];
-    // console.log(selectedFile)
+   
+    //this has to be dynamic via jwt token
+    let approvemntStatus="2";
+    let addedBy="shrimaliparth1@gmail.com"
     data["pdf"] = fileData.file;
+    data["approvementStatus"]=approvemntStatus;
+    data["addedBy"]=addedBy;
+    // if(jwt.getRole=="admin")
+    // {
+    //   approvemntStatus=1;
+    // }
+   
     if (!file) {
       setError("File is missing");
       err("file is missing")
@@ -112,7 +118,7 @@ function AddCustomerForApprovement() {
     setTwoSecondsCompleted(false)
     setSubmitting(true);
     console.log(data)
-    registerCustomerAPI(data).then((res) => {
+    registerCustomerAPI({...data,approvemntStatus:approvemntStatus,addedBy:addedBy}).then((res) => {
 
       setSubmitting(false)
       setSubmitted(true)
