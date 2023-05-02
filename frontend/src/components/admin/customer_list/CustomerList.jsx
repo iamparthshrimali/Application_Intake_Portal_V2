@@ -9,6 +9,7 @@ const CustomerList = () => {
   
   const [tableData, setTableData] = useState([])
   let [tableUpdated,setTableUpdated]=useState(false);
+  let [length,setLength]=useState(0);
   const columns = [
     { title: "Email", field:"email", sorting: true, filtering: true, headerStyle: { color: "#fff" } },
     { title: "First Namer", field: "fname", filterPlaceholder: "filter" },
@@ -22,7 +23,13 @@ const CustomerList = () => {
   ]
 
   useEffect(() => {
-      axios.get("http://localhost:8080/getCustomersList").then(res => setTableData(res.data)).catch((err)=>alert("Error Occured"))
+      axios.get("http://localhost:8080/getCustomersList").then(res => {
+        setTableData(res.data);
+        setLength(Array.from(res.data).length)
+        alert(length);
+    }
+      
+      ).catch((err)=>alert("Error Occured"))
   },[tableUpdated]);
   return (
     <>
@@ -74,8 +81,8 @@ const CustomerList = () => {
         options={{
           sorting: true, search: true,
           searchFieldAlignment: "right", searchAutoFocus: true, searchFieldVariant: "standard",
-          filtering: true, paging: true, pageSizeOptions: [2, 5, 10, 20, 25, 50, 100], pageSize: 5,
-          paginationType: "stepped", showFirstLastPageButtons: true, paginationPosition: "both", exportButton: true,
+          filtering: true, paging: true, pageSizeOptions: [2, 5, 10, 20, 25, 50,100], pageSize: 10,
+          paginationType: "stepped", showFirstLastPageButtons: true, paginationPosition: 'bottom', exportButton: true,
           exportAllData: true, exportFileName: "TableData", addRowPosition: "first", actionsColumnIndex: -1, selection: true,
           showSelectAllCheckbox: true, showTextRowsSelected: true,
           // selectionProps: rowData => ({

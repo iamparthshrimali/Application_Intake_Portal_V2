@@ -10,9 +10,7 @@ function classNames(...classes) {
 }
 
 export default function Navabar({navigation}) {
-  useEffect(()=>{
-   
-  },[])
+
 
   return (
  
