@@ -6,3 +6,5 @@ edit/update left in customer list in admin
 deleting remaining in customers in agent side.
 
 Employee approvement still pending.
+
+while opening the agent_page nothing showing first(set default page as customer list)

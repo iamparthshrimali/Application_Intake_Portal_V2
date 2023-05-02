@@ -68,7 +68,7 @@ function handler(pdf) {
           >
             <div className="relative w-auto  mx-auto max-w-3xl">
               {/*content*/}
-              <Pdf />
+              <Pdf pdfSrc={pdfSrc} />
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none " id="content">
              
            

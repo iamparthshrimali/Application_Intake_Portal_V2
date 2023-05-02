@@ -24,7 +24,7 @@ function downloadURI(uri) {
   // document.body.removeChild(link);
 }
 
-function Pdf() {
+function Pdf({pdfSrc}) {
   const styles = {
     container: {
       maxWidth: 900, 
@@ -52,14 +52,14 @@ function Pdf() {
       zIndex:"1000"
     },
   };
-  const [pdf, setPdf] = useState(null);
-  function handler(pdf) {
-    const pdfSrc = `data:application/pdf;base64,${pdf}`;
-        // document.querySelector('#frame').src = pdfSrc;
-        // document.querySelector('#frame2').src = pdfSrc;
-        setPdf(pdfSrc)
+  const [pdf, setPdf] = useState("something");
+  // function handler(pdf) {
+  //   const pdfSrc = `data:application/pdf;base64,${pdf}`;
+  //       // document.querySelector('#frame').src = pdfSrc;
+  //       // document.querySelector('#frame2').src = pdfSrc;
+  //       setPdf(pdfSrc)
     
-  }
+  // }
   const [autoDate, setAutoDate] = useState(true);
   const [signatureURL, setSignatureURL] = useState(null);
   const [position, setPosition] = useState(null);
@@ -73,10 +73,11 @@ function Pdf() {
 
 
   useEffect(()=>{
-    axios.get("http://localhost:8080/retrieveFile2?username=dwarkesh@gmail.com").then((res)=>{
-      handler(res.data.data);
+    // axios.get("http://localhost:8080/retrieveFile2?username=dwarkesh@gmail.com").then((res)=>{
+    //   handler(res.data.data);
    
-    })
+    // })
+    setPdf(pdfSrc)
   },[])
 
   return (
@@ -241,7 +242,7 @@ function Pdf() {
                 />
               ) : null}
              <Document
-                file={pdf}
+                file={pdf} 
                 onLoadSuccess={(data) => {
                   setTotalPages(data.numPages);
                 }}
