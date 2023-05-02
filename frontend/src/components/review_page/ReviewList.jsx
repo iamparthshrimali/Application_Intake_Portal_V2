@@ -4,14 +4,16 @@ import axios from 'axios';
 import MaterialTable from 'material-table';
 import React, { useEffect, useState } from 'react';
 import { FadeLoader } from 'react-spinners';
-
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import { useTabContext } from '@mui/lab';
+import Pdf from '../../pdf/Pdf';
 
 
 const ReviewList = () => {
 
   const [showModal, setShowModal] = React.useState(false);
   const [loading,setLoading]=useState(true);
-
+  const [pdfEmail,setPdfEmail]=useState(false);
   
   
   const [tableData, setTableData] = useState([])
@@ -39,49 +41,49 @@ function handler(pdf) {
 }
 
   useEffect(() => {
-      axios.get("http://localhost:8080/getCustomersList").then(res => setTableData(res.data)).catch((err)=>setTableData(false))
-      axios.get("http://localhost:8080/retrieveFile2?username=kishan@gmail.com").then((res)=>{
-        handler(res.data.data);
-       setLoading(false)
-      })
+      axios.get("http://localhost:8080/getCustomersListForAgent?email=shrimaliparth1@gmail.com").then(res => setTableData(res.data)).catch((err)=>setTableData(false))
+    
   },[tableUpdated]);
+
+  useEffect(()=>{
+    if(pdfEmail)
+       axios.get(`http://localhost:8080/retrieveFile2?username=${pdfEmail}`).then((res)=>{
+      handler(res.data.data);
+      setLoading(false)
+  }).catch((err)=>{
+    setLoading(false);
+    alert("Error occured while fetching pdf");
+  })
+  },[pdfEmail])
+
   return (
-    <div style={{postion:"relative"}}>
+    <div style={{postion:"relative",}}>
       <div style={{}}>
-      <button
-        className="bg-pink-500 text-white active:bg-pink-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-        type="button"
-        onClick={() => setShowModal(true)}
-      >
-        Open regular modal
-      </button>
+    
       {showModal ? (
         <>
-          <div
-            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
+          <div >
+          <div 
+            className="  flex overflow-y-auto fixed inset-0 z-50 outline-none overflow-x-hidden focus:outline-none" style={{height:"300px",width:"max-content"}}
           >
-            <div className="relative w-auto my-6 mx-auto max-w-3xl">
+            <div className="relative w-auto  mx-auto max-w-3xl">
               {/*content*/}
+              <Pdf />
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none " id="content">
-                {/*header*/}
              
-                {/* <iframe id="frame2" style={{width:"600px",height:"600px"}} /> */}
-               { !loading ?  <iframe title='pdf' id="frame" src={pdfSrc} style={{width:"600px",height:"400px"}} ></iframe>: <div style={{display:"flex",justifyContent:"center"}}>
-                   <FadeLoader />
-                </div> }
-                {/*footer*/}
-                <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+           
                   <button
-                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" style={{position:"absolute",right:"20px"}}
                     type="button"
                     onClick={() => setShowModal(false)}
                   >
-                    Close
+                    X
                   </button>
                 
-                </div>
+            
               </div>
             </div>
+          </div>
           </div>
           <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
         </>
@@ -109,13 +111,7 @@ function handler(pdf) {
             }
             makePostRequest();
           }),
-          onRowUpdate: (newRow, oldRow) => new Promise((resolve, reject) => {
-            axios.post("http://localhost:8080/updateCustomer",newRow).then(()=>{     
-            resolve();
-            // By hook or crook i wanted to react know that table is updated
-              tableUpdated ? setTableUpdated(false) : setTableUpdated(true);      
-            });
-          }),
+        
           onRowDelete: (selectedRow) => new Promise((resolve, reject) => {
             axios.get(`http://localhost:8080/deleteCustomer?email=${selectedRow.email}`).then(()=>{
             resolve();
@@ -124,13 +120,20 @@ function handler(pdf) {
             });
           })
         }}
-        actions={[
-          {
-            icon: () => <GetAppIcon />,
-            tooltip: "Click me",
-            onClick: (e, data) => console.log(data),
+        actions={[(row)=>{
+          return {
+            icon: () => <VisibilityOutlinedIcon />,
+            tooltip: "View Pdf",
+            onClick:  () => {
+              setShowModal(true);
+              // console.log(row);
+              setPdfEmail(row.email);
+            }
+              
             // isFreeAction:true
           }
+        }
+          
         ]}
         onSelectionChange={(selectedRows) => console.log(selectedRows)}
         options={{
@@ -138,8 +141,7 @@ function handler(pdf) {
           searchFieldAlignment: "right", searchAutoFocus: true, searchFieldVariant: "standard",
           filtering: true, paging: true, pageSizeOptions: [2, 5, 10, 20, 25, 50, 100], pageSize: 5,
           paginationType: "stepped", showFirstLastPageButtons: true, paginationPosition: "both", exportButton: true,
-          exportAllData: true, exportFileName: "TableData", addRowPosition: "first", actionsColumnIndex: -1, selection: true,
-          showSelectAllCheckbox: true, showTextRowsSelected: true,
+          exportAllData: true, exportFileName: "TableData", addRowPosition: "first", actionsColumnIndex: -1, editable: 'never',
           // selectionProps: rowData => ({
           //   disabled: rowData.age === null,
             // color:"primary"

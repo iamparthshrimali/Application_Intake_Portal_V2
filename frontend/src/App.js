@@ -4,6 +4,7 @@ import AddCustomerForApprovement from "./components/customer_for_approvement_pag
 import Home from "./components/home/Home";
 import Register from "./components/register/Register";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import Pdf from "./pdf/Pdf"
 
 
 
@@ -44,6 +45,7 @@ function App() {
           <Route  index path="list"   element={<AgentCustomersList />} />
         </Route>
         <Route path="/reviewer_page" element={<ReviewerPage />} />
+        <Route path="/pdf" element={<Pdf />} />
       </Routes>
     </div>
   );

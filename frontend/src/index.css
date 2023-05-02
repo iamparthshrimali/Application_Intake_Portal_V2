@@ -21,3 +21,14 @@ input:disabled {
     border-radius: 10px;
     
 }
+.react-pdf__Page__canvas {
+    margin: 0 auto;
+    width: 80% !important;
+    height: "100px" !important;
+   
+}
+
+.react-pdf__Page__annotations{
+    height:0 !important;
+  
+}
