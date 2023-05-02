@@ -1,2 +1,8 @@
 /addCustomer request mapping added in spring boot
 download form button remaining in addCustomerForApprovementPage
+
+
+edit/update left in customer list in admin
+deleting remaining in customers in agent side.
+
+Employee approvement still pending.

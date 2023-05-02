@@ -29,14 +29,7 @@ const EmployeeList = () => {
       <MaterialTable columns={columns} data={tableData}  title="Customers Information"
         editable={{
           
-          onRowUpdate: (newRow, oldRow) => new Promise((resolve, reject) => {
-            
-            axios.post("http://localhost:8080/updateCustomer",newRow).then(()=>{     
-            resolve();
-            // By hook or crook i wanted to react know that table is updated
-              tableUpdated ? setTableUpdated(false) : setTableUpdated(true);      
-            });
-          }),
+        
           onRowDelete: (selectedRow) => new Promise((resolve, reject) => {
             console.log(selectedRow)
             axios.post(`http://localhost:8080/delete`,selectedRow).then(()=>{

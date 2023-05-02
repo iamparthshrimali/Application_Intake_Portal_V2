@@ -1,0 +1,13 @@
+throw err; or eintigrity
+and some green green texts
+npm i --legacy-peer-deps
+
+if it doesn't work then 
+delete package.lock.json and then npm i --legacy-peer-deps
+
+if none the react version wwork then do 17.0.2 like below
+ 
+    "react": "^17.0.2",
+    "react-dom":"^17.0.2",
+
+

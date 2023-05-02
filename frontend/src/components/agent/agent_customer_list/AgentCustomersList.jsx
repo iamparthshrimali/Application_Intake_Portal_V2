@@ -113,13 +113,7 @@ function handler(pdf) {
             }
             makePostRequest();
           }),
-          onRowUpdate: (newRow, oldRow) => new Promise((resolve, reject) => {
-            axios.post("http://localhost:8080/updateCustomer",newRow).then(()=>{     
-            resolve();
-            // By hook or crook i wanted to react know that table is updated
-              tableUpdated ? setTableUpdated(false) : setTableUpdated(true);      
-            });
-          }),
+        
           onRowDelete: (selectedRow) => new Promise((resolve, reject) => {
             axios.get(`http://localhost:8080/deleteCustomer?email=${selectedRow.email}`).then(()=>{
             resolve();
@@ -149,7 +143,7 @@ function handler(pdf) {
           searchFieldAlignment: "right", searchAutoFocus: true, searchFieldVariant: "standard",
           filtering: true, paging: true, pageSizeOptions: [2, 5, 10, 20, 25, 50, 100], pageSize: 5,
           paginationType: "stepped", showFirstLastPageButtons: true, paginationPosition: "both", exportButton: true,
-          exportAllData: true, exportFileName: "TableData", addRowPosition: "first", actionsColumnIndex: -1, 
+          exportAllData: true, exportFileName: "TableData", addRowPosition: "first", actionsColumnIndex: -1, editable: 'never',
           // selectionProps: rowData => ({
           //   disabled: rowData.age === null,
             // color:"primary"
