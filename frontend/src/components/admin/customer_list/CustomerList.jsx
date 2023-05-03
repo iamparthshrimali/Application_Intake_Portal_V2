@@ -1,8 +1,10 @@
+import { Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import axios from 'axios';
 import MaterialTable from 'material-table';
 import React, { useEffect, useState } from 'react';
+import {FadeLoader} from 'react-spinners'
 
 
 const CustomerList = () => {
@@ -10,6 +12,7 @@ const CustomerList = () => {
   const [tableData, setTableData] = useState([])
   let [tableUpdated,setTableUpdated]=useState(false);
   let [length,setLength]=useState(0);
+  const [loading,setLoading]=useState(true);
   const columns = [
     { title: "Email", field:"email", sorting: true, filtering: true, headerStyle: { color: "#fff" } },
     { title: "First Namer", field: "fname", filterPlaceholder: "filter" },
@@ -23,10 +26,12 @@ const CustomerList = () => {
   ]
 
   useEffect(() => {
+    setLoading(true);
       axios.get("http://localhost:8080/getCustomersList").then(res => {
         setTableData(res.data);
+        setLoading(false);
         setLength(Array.from(res.data).length)
-        alert(length);
+        // alert(length);
     }
       
       ).catch((err)=>alert("Error Occured"))
@@ -34,6 +39,15 @@ const CustomerList = () => {
   return (
     <>
       <MaterialTable columns={columns} data={tableData}  title="Customers Information"
+        localization={{
+         
+          body: {
+              emptyDataSourceMessage: ' records to display',
+              filterRow: {
+                  filterTooltip: 'Filter'
+              }
+          }
+      }}
         editable={{
           onRowAdd: (newRow) => new Promise((resolve, reject) => {
             // setTableData([...tableData, newRow])
@@ -77,8 +91,11 @@ const CustomerList = () => {
             // isFreeAction:true
           }
         ]}
+
+       
         onSelectionChange={(selectedRows) => console.log(selectedRows)}
         options={{
+          loadingType: <FadeLoader color="#36d7b7" />,
           sorting: true, search: true,
           searchFieldAlignment: "right", searchAutoFocus: true, searchFieldVariant: "standard",
           filtering: true, paging: true, pageSizeOptions: [2, 5, 10, 20, 25, 50,100], pageSize: 10,

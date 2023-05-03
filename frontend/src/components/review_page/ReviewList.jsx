@@ -15,6 +15,7 @@ const ReviewList = () => {
   const [loading,setLoading]=useState(true);
   const [pdfEmail,setPdfEmail]=useState(false);
   const [pdfChanged,setPdfChanged]=useState(false);
+ 
   
   
   const [tableData, setTableData] = useState([])
@@ -80,7 +81,7 @@ const ReviewList = () => {
           >
             X
           </button>
-          {pdfSrc ? <Pdf pdfSrc={pdfSrc}  /> : <div>Loading PDF...</div>}
+          {pdfSrc ? <Pdf pdfSrc={pdfSrc} setPdfSrc={setPdfSrc}  /> : <div>Loading PDF...</div>}
         </div>
       </div>
     </div>
@@ -90,6 +91,13 @@ const ReviewList = () => {
     
       </div>
       <MaterialTable columns={columns} data={tableData}  title="Customers Information"
+         localization={{
+         
+          body: {
+              emptyDataSourceMessage:   <FadeLoader color="#36d7b7" /> 
+            
+          }
+      }}
         editable={{
           onRowAdd: (newRow) => new Promise((resolve, reject) => {
             // setTableData([...tableData, newRow])

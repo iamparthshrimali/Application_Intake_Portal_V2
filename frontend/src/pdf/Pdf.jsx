@@ -24,7 +24,7 @@ function downloadURI(uri) {
   // document.body.removeChild(link);
 }
 
-function Pdf({pdfSrc}) {
+function Pdf({pdfSrc,setPdfSrc}) {
   const styles = {
     container: {
       maxWidth: 900, 
@@ -135,70 +135,19 @@ function Pdf({pdfSrc}) {
               
                 }}
               />
-              {pdf ? (
+              {pdfSrc ? (
                 <BigButton
                   marginRight={8}
                   inverted={true}
                   title={"Download"}
                   onClick={() => {
-                    downloadURI(pdf);
+                    downloadURI(pdfSrc);
                   }}
                 />
               ) : null}
             </div>
             <div ref={documentRef} style={styles.documentBlock}>
-              {textInputVisible ? (
-                <DraggableText
-                  initialText={
-                    textInputVisible === "date"
-                      ? dayjs().format("M/d/YYYY")
-                      : null
-                  }
-                  onCancel={() => setTextInputVisible(false)}
-                  onEnd={setPosition}
-                  onSet={async (text) => {
-                    const { originalHeight, originalWidth } = pageDetails;
-                    const scale = originalWidth / documentRef.current.clientWidth;
-
-                    const y =
-                      documentRef.current.clientHeight -
-                      (position.y +
-                        (12 * scale) -
-                        position.offsetY -
-                        documentRef.current.offsetTop);
-                    const x =
-                      position.x -
-                      166 -
-                      position.offsetX -
-                      documentRef.current.offsetLeft;
-
-                    // new XY in relation to actual document size
-                    const newY =
-                      (y * originalHeight) / documentRef.current.clientHeight;
-                    const newX =
-                      (x * originalWidth) / documentRef.current.clientWidth;
-
-                    const pdfDoc = await PDFDocument.load(pdf);
-
-                    const pages = pdfDoc.getPages();
-                    const firstPage = pages[pageNum];
-
-                    firstPage.drawText(text, {
-                      x: newX,
-                      y: newY,
-                      size: 20 * scale,
-                    });
-
-                    const pdfBytes = await pdfDoc.save();
-                    const blob = new Blob([new Uint8Array(pdfBytes)]);
-
-                    const URL = await blobToURL(blob);
-                    setPdf(URL);
-                    setPosition(null);
-                    setTextInputVisible(false);
-                  }}
-                />
-              ) : null}
+        
               {signatureURL ? (
                 <DraggableSignature
                   url={signatureURL}
@@ -225,9 +174,9 @@ function Pdf({pdfSrc}) {
                     const newY =
                       (y * originalHeight) / documentRef.current.clientHeight;
                     const newX =
-                      (x * originalWidth) / documentRef.current.clientWidth;
+                      ((x * originalWidth) / documentRef.current.clientWidth)-265;
 
-                    const pdfDoc = await PDFDocument.load(pdf);
+                    const pdfDoc = await PDFDocument.load(pdfSrc); //appending signature here
 
                     const pages = pdfDoc.getPages();
                     const firstPage = pages[pageNum];
@@ -249,7 +198,7 @@ function Pdf({pdfSrc}) {
                     const blob = new Blob([new Uint8Array(pdfBytes)]);
 
                     const URL = await blobToURL(blob);
-                    setPdf(URL);
+                    setPdfSrc(URL);
                     setPosition(null);
                     setSignatureURL(null);
                   }}
