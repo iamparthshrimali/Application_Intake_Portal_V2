@@ -58,9 +58,7 @@ const ReviewList = () => {
       
   },[pdfEmail])
 
-  useEffect(()=>{
-    setPdfSrc(pdfSrc);
-  },showModal)
+
 
   return (
     <div style={{postion:"relative",}}>
@@ -76,7 +74,7 @@ const ReviewList = () => {
             className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mt-1 absolute right-0"
             type="button"
             onClick={() =>{
-              setPdfSrc(null);
+              // setPdfSrc(null);
              setShowModal(false)}
             }
           >
@@ -127,6 +125,7 @@ const ReviewList = () => {
             tooltip: "View Pdf",
             onClick:  () => {
               setShowModal(true);
+              
               // console.log(row);
               setPdfEmail(row.email);
             }
@@ -167,126 +166,3 @@ export default ReviewList
 
 
 
-
-// const [customers, setCustomers] = useState(false)
-// useEffect(() => {
-//   axios.get("http://localhost:8080/getCustomersList").then(res => setCustomers(res.data)).catch((err)=>setCustomers(false))
-  
-//   console.log(customers)
-// }, [customers])
-// const printTable = () => {
-//   return <>
-//     <div class="container mx-auto px-4 sm:px-8 ">
-//       <div class="py-8">
-//         <div>
-//           <h2 class="text-2xl font-semibold leading-tight">Customers List</h2>
-//         </div>
-//         <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto  " >
-//           <div
-//             class=" inline-block min-w-full shadow-md rounded-lg overflow-hidden" 
-//           >
-//             <table class="min-w-full leading-normal  ">
-//               <thead>
-//                 <tr>
-//                   <th
-//                     class="px-5 py-3 border-b-2 bg-violet-300  text-left text-xs font-semibold text-gray-700 uppercase tracking-wider "
-//                   >
-//                     Email
-//                   </th>
-//                   <th
-//                     class="px-5 py-3 border-b-2 bg-violet-300  text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
-//                   >
-//                     First Name
-//                   </th>
-//                   <th
-//                     class="px-5 py-3 border-b-2 bg-violet-300  text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
-//                   >
-//                     Last Name
-//                   </th>
-//                   <th
-//                     class="px-5 py-3 border-b-2 border-violet-200 bg-violet-300 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
-//                   >
-//                     Address
-//                   </th>
-//                   <th
-//                     class="px-5 py-3 border-b-2 border-violet-200 bg-violet-300 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
-//                   >
-//                     City
-//                   </th>
-//                   <th
-//                     class="px-5 py-3 border-b-2 border-violet-200 bg-violet-300 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider"
-//                   >
-//                     state
-//                   </th>
-//                 </tr>
-//               </thead>
-//               <tbody>
-//                 {
-//                   customers.map((customer)=>{
-//                     return  <>
-//                         <tr>
-//                   <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-//                     <div class="flex">
-
-//                       <div class="ml-3">
-//                         <p class="text-gray-900 whitespace-no-wrap">
-//                          {customer.email}
-//                         </p>
-//                       </div>
-//                     </div>
-//                   </td>
-//                   <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-//                     <div class="flex">
-
-//                       <div class="ml-3">
-//                         <p class="text-gray-900 whitespace-no-wrap">
-//                         {customer.fname}
-//                         </p>
-//                       </div>
-//                     </div>
-//                   </td>
-//                   <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-//                     <p class="text-gray-900 whitespace-no-wrap">{customer.lname}</p>
-//                   </td>
-//                   <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-//                     <div style={{width:"120px"}}>
-//                     <p class="text-gray-900 whitespace-no-wrap">{customer.address}</p>
-//                     </div>
-                  
-//                   </td>
-//                   <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-//                     <div style={{width:"120px"}}>
-//                     <p class="text-gray-900 whitespace-no-wrap">{customer.city}</p>
-//                     </div>
-                  
-//                   </td>
-//                   <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-//                     <div style={{width:"120px"}}>
-//                     <p class="text-gray-900 whitespace-no-wrap">{customer.state}</p>
-//                     </div>
-                  
-//                   </td>
-
-//                 </tr>
-//                       </>
-//                   })
-//                 }
-              
-
-//               </tbody>
-//             </table>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   </>
-// }
-
-// return (
-//   <>
-//     {
-//      customers ?  printTable() :"No customers are exist" 
-//   }
-
-//   </>
-// )

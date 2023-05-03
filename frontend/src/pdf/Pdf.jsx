@@ -79,12 +79,12 @@ function Pdf({pdfSrc}) {
 
     // })
 
-    console.log("component mounted");
+    console.log(" pdf component mounted");
     // setPdf(pdfSrc)
    
   
     return ()=>{
-          console.log("component unmounted");
+          console.log(" pdf component unmounted");
           
     }
     
@@ -93,7 +93,7 @@ function Pdf({pdfSrc}) {
   //componentDidMount()
   //componentDidUpdate()
   //componentWillUnmount()
-  console.log("component reloaded")
+  console.log("pdf component reloaded")
   
   return (
     <div>
