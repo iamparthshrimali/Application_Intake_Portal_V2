@@ -52,7 +52,7 @@ function Pdf({pdfSrc}) {
       zIndex:"1000"
     },
   };
-  const [pdf, setPdf] = useState("something");
+  const [pdf, setPdf] = useState(null);
   // function handler(pdf) {
   //   const pdfSrc = `data:application/pdf;base64,${pdf}`;
   //       // document.querySelector('#frame').src = pdfSrc;
@@ -69,17 +69,32 @@ function Pdf({pdfSrc}) {
   const [totalPages, setTotalPages] = useState(0);
   const [pageDetails, setPageDetails] = useState(null);
   const documentRef = useRef(null);
- 
+ const [count,setCount]=useState(0)
 
 
   useEffect(()=>{
     // axios.get("http://localhost:8080/retrieveFile2?username=dwarkesh@gmail.com").then((res)=>{
     //   handler(res.data.data);
    
+
     // })
-    setPdf(pdfSrc)
+
+    console.log("component mounted");
+    // setPdf(pdfSrc)
+   
+  
+    return ()=>{
+          console.log("component unmounted");
+          
+    }
+    
   },[])
 
+  //componentDidMount()
+  //componentDidUpdate()
+  //componentWillUnmount()
+  console.log("component reloaded")
+  
   return (
     <div>
       <div style={styles.container}>
@@ -98,7 +113,7 @@ function Pdf({pdfSrc}) {
 
       
       
-        {pdf ? (
+        {pdfSrc ? (
           <div>
             <div style={styles.controls}>
               {!signatureURL ? (
@@ -241,8 +256,9 @@ function Pdf({pdfSrc}) {
                   onEnd={setPosition}
                 />
               ) : null}
-             <Document
-                file={pdf} 
+           { pdfSrc ?   <Document 
+                key={count}
+                file={pdfSrc} 
                 onLoadSuccess={(data) => {
                   setTotalPages(data.numPages);
                 }}
@@ -256,6 +272,7 @@ function Pdf({pdfSrc}) {
                   
                   onLoadSuccess={(data) => {
                     setPageDetails(data);
+
                   }}
                   renderTextLayer={false}
                   style={{
@@ -263,6 +280,7 @@ function Pdf({pdfSrc}) {
                   }}
                 />
               </Document>
+              :""}
             </div>
             <PagingControl
               pageNum={pageNum}

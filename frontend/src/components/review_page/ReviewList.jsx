@@ -14,6 +14,7 @@ const ReviewList = () => {
   const [showModal, setShowModal] = React.useState(false);
   const [loading,setLoading]=useState(true);
   const [pdfEmail,setPdfEmail]=useState(false);
+  const [pdfChanged,setPdfChanged]=useState(false);
   
   
   const [tableData, setTableData] = useState([])
@@ -32,62 +33,62 @@ const ReviewList = () => {
      headerStyle: { color: "#fff" } },
   ]
   
-function handler(pdf) {
-  const pdfSrc = `data:application/pdf;base64,${pdf}`;
-      // document.querySelector('#frame').src = pdfSrc;
-      // document.querySelector('#frame2').src = pdfSrc;
-      setPdfSrc(pdfSrc)
-  
-}
 
   useEffect(() => {
       axios.get("http://localhost:8080/getCustomersListForAgent?email=shrimaliparth1@gmail.com").then(res => setTableData(res.data)).catch((err)=>setTableData(false))
+    },[tableUpdated]);
     
-  },[tableUpdated]);
+  
+  useEffect(()=>{
+    setLoading(true);
+    if(pdfEmail)
+    {
+
+      axios.get(`http://localhost:8080/retrieveFile2?username=${pdfEmail}`).then((res)=>{
+       const pdfSrc = `data:application/pdf;base64,${res.data.data}`;
+       setPdfSrc(pdfSrc)
+       setLoading(false)
+       // document.querySelector('#frame').src = pdfSrc;
+   
+     }).catch((err)=>{
+       setLoading(false);
+       alert("Error occured while fetching pdf");
+     }) 
+    }
+      
+  },[pdfEmail])
 
   useEffect(()=>{
-    if(pdfEmail)
-       axios.get(`http://localhost:8080/retrieveFile2?username=${pdfEmail}`).then((res)=>{
-      handler(res.data.data);
-      setLoading(false)
-  }).catch((err)=>{
-    setLoading(false);
-    alert("Error occured while fetching pdf");
-  })
-  },[pdfEmail])
+    setPdfSrc(pdfSrc);
+  },showModal)
 
   return (
     <div style={{postion:"relative",}}>
       <div style={{}}>
     
       {showModal ? (
-        <>
-          <div >
-          <div 
-            className="  flex overflow-y-auto fixed inset-0 z-50 outline-none overflow-x-hidden focus:outline-none" style={{height:"300px",width:"max-content"}}
+  <>
+    <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+    <div className="flex overflow-y-auto fixed inset-0 z-50 outline-none overflow-x-hidden focus:outline-none">
+      <div className="relative w-auto mx-auto max-w-3xl">
+        <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+          <button
+            className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mt-1 absolute right-0"
+            type="button"
+            onClick={() =>{
+              setPdfSrc(null);
+             setShowModal(false)}
+            }
           >
-            <div className="relative w-auto  mx-auto max-w-3xl">
-              {/*content*/}
-              <Pdf pdfSrc={pdfSrc} />
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none " id="content">
-             
-           
-                  <button
-                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" style={{position:"absolute",right:"20px"}}
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                  >
-                    X
-                  </button>
-                
-            
-              </div>
-            </div>
-          </div>
-          </div>
-          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-        </>
-      ) : null}
+            X
+          </button>
+          {pdfSrc ? <Pdf pdfSrc={pdfSrc}  /> : <div>Loading PDF...</div>}
+        </div>
+      </div>
+    </div>
+  </>
+) : null}
+
     
       </div>
       <MaterialTable columns={columns} data={tableData}  title="Customers Information"
